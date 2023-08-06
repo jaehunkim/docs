@@ -24,9 +24,9 @@ This tutorial demonstrates how to:
 
 For transferring USDC via the CCTP on testnet, you can use [https://usdcfaucet.com/](https://usdcfaucet.com/). For mainnet, acquire USDC on your favorite CEX or DEX.
 
-### Send a message with tokens
+### Send tokens
 
-Sending a message with tokens is a simple matter of calling `TokenRouter.transferRemote`. This function can be called easily using Etherscan+[Metamask](https://metamask.io/) or [cast](https://book.getfoundry.sh/cast/).
+Sending tokens is a simple matter of calling `TokenRouter.transferRemote`. This function can be called easily using Etherscan+[Metamask](https://metamask.io/) or [cast](https://book.getfoundry.sh/cast/).
 
 {% tabs %}
 {% tab title="Using Metamask" %}
@@ -40,6 +40,8 @@ Sending a message with tokens is a simple matter of calling `TokenRouter.transfe
 6. Submit the transaction via Metamask
 
 **Dispatch a Message With Tokens**
+
+LiquidityLayerV2 does not support the transmission of both tokens and messages in precisely one transaction, as was the case in V1. Instead, you could just send the tokens to the recipient and then implicitly assume that a handle of the application message would revert when the tokens are not there (i.e. an approve and swap on Uniswap for example). In this case, the transmission of messages is resolved using the existing ICA.
 
 1. Navigate to the LiquidityLayerRouter contract page on **TODO** [Etherscan](https://goerli.etherscan.io/address/0x2abe0860D81FB4242C748132bD69D125D88eaE26).
 2. Under the `Contract` tab, find the `Write as Proxy` button.
