@@ -1,15 +1,16 @@
 ---
-description: Attach value with your Hyperlane messages using the Liquidity Layer API.
+description: Attach value with your Hyperlane messages using the Liquidity Layer V2 API.
 ---
 
-# Liquidity Layer API
+# Liquidity Layer V2 API
 
 {% hint style="warning" %}
-The LiquidityLayer API is in beta. The API is subject to change
+The LiquidityLayer V2 API is in beta. The API is subject to change
 {% endhint %}
 
-Hyperlane's Liquidity layer wraps token bridges to allow developers to send tokens alongside their message.
+Hyperlane's Liquidity layer wraps token bridges to allow developers to send tokens.
 
+### TODO : copy from diagrams
 ```mermaid
 %%{ init: {
   "theme": "neutral",
@@ -50,9 +51,6 @@ flowchart LR
 * Circle
   * Token: USDC
   * Chains: Etherum and Avalanche C-Chain (Mainnet), Goerli and Fuji (Testnet)
-* Portal
-  * Token: USDC, ETH
-  * Chains: Goerli, Fuji, Mumbai, BSC Testnet, Alfajores (Testnet only)
 
 ### Send
 
@@ -64,65 +62,22 @@ Developers can send interchain messages very similarly to the [messaging-api](..
 // SPDX-License-Identifier: MIT OR Apache-2.0
 pragma solidity >=0.6.11;
 
-interface ILiquidityLayerRouter {
-    function dispatchWithTokens(
+interface ILiquidityLayerAdapterV2 {
+    function transferRemote(
         uint32 _destinationDomain,
         bytes32 _recipientAddress,
-        address _token,
-        uint256 _amount,
-        string calldata _bridge,
-        bytes calldata _messageBody
-    ) external returns (bytes32);
+        uint256 _amount
+    ) external payable returns (bytes32);
 }
-
 ```
 
 `_destinationDomain` is the chain you're sending to. Domain ID's can be found [here](../resources/domains.md).
 
-`_recipientAddress` is the receiving contract, it needs to be a contract with the `handleWithTokens()` function, you can read about it in the [Receive](token-bridge-api.md#receive) section.
+`_recipientAddress` is the receiving contract.
 
-`_messageBody` is the message you're passing.
+`_amount` is the amount of USDC you want to transfer
 
-`_token` is the address of the token on the origin chain you are trying to transfer
-
-`_amount` is the amount of `_token` you want to transfer
-
-`_bridge` is a string identifier for the value bridge you want to use, `"Circle"` or `"Portal"` are currently supported
-
-### Receive
-
-Like sending, receiving is very similar to the [messaging-api](../apis/messaging-api/ "mention"):thumbsup:
-
-#### Interface
-
-```solidity
-// SPDX-License-Identifier: Apache-2.0
-pragma solidity ^0.8.13;
-
-interface ILiquidityLayerMessageRecipient {
-    function handleWithTokens(
-        uint32 _origin,
-        bytes32 _sender,
-        bytes calldata _message,
-        address _token,
-        uint256 _amount
-    ) external;
-}
-
-```
-
-`_origin` the Domain ID of the source chain, IDs found [here](../resources/domains.md#mainnet).
-
-`_sender` the address of the message sender on the source chain
-
-`_messageBody` the message being passed.
-
-`_address` is the address of the token that was transferred to the recipient
-
-`_amount` is the amount of the token that was transferred
-
-The same points about access control and encoding from the [messaging-api](../apis/messaging-api/ "mention") apply to the LiquidityLayer API as well, so be sure to check it out. However, rather than requiring access control such that the Mailbox can only call the `handle` function, the LiquidityLayerRouter on the local chain must be the only address that can call the `handleWithTokens` function.
-
+### TODO : interchain gas
 ### Paying for Interchain Gas
 
 Just like all Hyperlane messages that wish to have their messages delivered by a relayer, users must [pay for interchain gas](../build-with-hyperlane/guides/paying-for-interchain-gas.md).
