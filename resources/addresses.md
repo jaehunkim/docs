@@ -114,7 +114,9 @@ Advanced use - [read here](../build-with-hyperlane/guides/developers/paying-for-
 | Gnosis    | `0x9bBdef63594D5FFc2f370Fe52115DdFFe97Bc524` | [View on gnosisscan.io](https://gnosisscan.io/address/0x9bBdef63594D5FFc2f370Fe52115DdFFe97Bc524)                     |
 
 
-### LiquidityLayer
+### LiquidityLayer V2
+
+**TODO**
 
 | Network   | Address                                      | Explorer                                                                                        |
 | --------- | -------------------------------------------- | ----------------------------------------------------------------------------------------------- |
